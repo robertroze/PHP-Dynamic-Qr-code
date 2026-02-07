@@ -24,12 +24,12 @@ services:
   php-dynamic-qrcode-db:
     image: "giandonatoinverso/php-dynamic-qr-code-db:latest"
     restart: "unless-stopped"
-  labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.qr.rule=Host(`qr.infiniten.co.uk`)"
-    - "traefik.http.routers.qr.entrypoints=websecure"
-    - "traefik.http.routers.qr.tls=true"
-    - "traefik.http.services.qr.loadbalancer.server.port=80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qr.rule=Host(`qr.infiniten.co.uk`)"
+      - "traefik.http.routers.qr.entrypoints=websecure"
+      - "traefik.http.routers.qr.tls=true"
+      - "traefik.http.services.qr.loadbalancer.server.port=80"
     volumes:
       - php_dynamic_qrcode_db_data:/var/lib/mysql
     environment:
