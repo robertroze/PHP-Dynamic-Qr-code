@@ -20,23 +20,6 @@ services:
       - php_dynamic_qrcode_saved_qrcode_data:/var/www/html/saved_qrcode
     networks:
       - php-dynamic-qrcode-network
-    labels:
-      # Essential: tell Traefik the internal port (80 confirmed from image docs)
-      - "traefik.http.services.qr-svc.loadbalancer.server.port=80"
-      
-      # Public: ONLY /read.php works for everyone
-      - "traefik.http.routers.qr-public.rule=Host(`${QR_DOMAIN}`) && Path(`/read.php`)"
-      - "traefik.http.routers.qr-public.service=qr-svc"
-      - "traefik.http.routers.qr-public.entrypoints=websecure"
-      - "traefik.http.routers.qr-public.tls.certresolver=letsencrypt"
-      
-      # VPN-only: everything else (/, index.php, admin, etc.)
-      - "traefik.http.routers.qr-admin.rule=Host(`${QR_DOMAIN}`) && !Path(`/read.php`)"
-      - "traefik.http.routers.qr-admin.service=qr-svc"
-      - "traefik.http.routers.qr-admin.entrypoints=websecure"
-      - "traefik.http.routers.qr-admin.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.qr-admin.middlewares=qr-vpn@docker"
-      - "traefik.http.middlewares.qr-vpn.ipallowlist.sourcerange=${WG_SUBNET}"
       
   php-dynamic-qrcode-db:
     image: "giandonatoinverso/php-dynamic-qr-code-db:latest"
