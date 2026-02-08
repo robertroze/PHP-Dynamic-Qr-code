@@ -1,7 +1,9 @@
 version: "3.2"
 services:
   php-dynamic-qrcode:
-    build: "robertroze/php-dynamic-qr-code:latest"
+    build:
+      context: .
+    image: robertroze/php-dynamic-qr-code:local
     restart: "unless-stopped"
     environment:
       TYPE: "docker"
