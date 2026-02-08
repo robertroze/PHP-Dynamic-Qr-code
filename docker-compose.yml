@@ -20,29 +20,6 @@ services:
       - php_dynamic_qrcode_saved_qrcode_data:/var/www/html/saved_qrcode
     networks:
       - php-dynamic-qrcode-network
-    labels:
-      - "traefik.enable=true"
-    
-      # Tell Traefik what port the app listens on inside the container
-      - "traefik.http.services.qr-svc.loadbalancer.server.port=80"
-    
-      # Make both routers use that service
-      - "traefik.http.routers.qr-public.service=qr-svc"
-      - "traefik.http.routers.qr-admin.service=qr-svc"
-    
-      # VPN allowlist middleware (WireGuard subnet)
-      - "traefik.http.middlewares.qr-vpn.ipallowlist.sourcerange=${WG_SUBNET:?}"
-    
-      # Public router: ONLY /read.php
-      - "traefik.http.routers.qr-public.rule=Host(`${QR_DOMAIN:?}`) && Path(`/read.php`)"
-      - "traefik.http.routers.qr-public.entrypoints=websecure"
-      - "traefik.http.routers.qr-public.tls=true"
-    
-      # Admin router: everything else, VPN only
-      - "traefik.http.routers.qr-admin.rule=Host(`${QR_DOMAIN:?}`) && !Path(`/read.php`)"
-      - "traefik.http.routers.qr-admin.entrypoints=websecure"
-      - "traefik.http.routers.qr-admin.tls=true"
-      - "traefik.http.routers.qr-admin.middlewares=qr-vpn@docker"
       
   php-dynamic-qrcode-db:
     image: "giandonatoinverso/php-dynamic-qr-code-db:latest"
